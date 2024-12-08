@@ -1,0 +1,52 @@
+﻿@page "/Listsv"
+
+<h3>List</h3>
+@rendermode InteractiveServer
+
+@inject ISinhVienServices _service
+
+<a href="/themsv" class="btn btn-primary">Add</a>
+
+@if (listsv == null)
+{
+    <h1>Dang tai ds...</h1>
+}
+else
+{
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>Name</td>
+                <td>Age</td>
+                <td>Class</td>
+            </tr>
+
+        </thead>
+        <tbody>
+            @foreach (var item in listsv)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Name</td>
+                    <td>@item.Age</td>
+                    <td>@item.Class</td>
+                </tr>
+            <td>
+                <a href="/xoasv/ @item.Id" >Delete</a>
+                <a href="/docsv/@item.Id" >Details</a>
+            </td>
+            }
+        </tbody>
+    </table>
+    
+}
+@code {
+    public List<SinhVien> listsv { get; set; }
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        listsv = await _service.GetAll();
+    }
+}

@@ -1,0 +1,43 @@
+﻿@page "/docsv/{id:int}"
+
+<h3>Details</h3>
+
+@inject ISinhVienServices _service
+
+@if (sinhVien == null)
+{
+    <h1>dang load...</h1>
+}
+else if (errorMessage != null)
+{
+    <div class="alert alert-danger">@errorMessage</div>
+}
+else
+{
+    <div>
+        <h4>@sinhVien.Name</h4>
+        <p><strong>ID:</strong> @sinhVien.Id</p>
+        <p><strong>Age:</strong> @sinhVien.Age</p>
+        <p><strong>Class:</strong> @sinhVien.Class</p>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private SinhVien sinhVien;
+    private string errorMessage;
+
+    protected async override Task OnInitializedAsync()
+    {
+        try
+        {
+            sinhVien = await _service.GetById(Id);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "Loi roi ma: " + ex.Message;
+        }
+    }
+}
